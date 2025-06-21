@@ -1,8 +1,9 @@
-package com.taskmanager.taskmanager.service;
+package com.taskmanager.taskmanager.service.impl;
 
 import com.taskmanager.taskmanager.entity.User;
 import com.taskmanager.taskmanager.enums.Role;
 import com.taskmanager.taskmanager.repository.UserRepository;
+import com.taskmanager.taskmanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.taskmanager.taskmanager.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User getUserById(Long id){
 		return userRepository.findById(id)
-				.orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
+				.orElseThrow(()-> new ResourceNotFoundException("User", "id", id));
 	}
 
 	@Override
@@ -37,6 +38,6 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User findByEmail(String email){
 		return userRepository.findByEmail(email)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+				.orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 	}
 }
