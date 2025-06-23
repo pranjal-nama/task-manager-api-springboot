@@ -12,7 +12,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Table(name = "tasks")
+@Table(name = "tasks", indexes = {
+		@Index(name = "idx_task_title", columnList = "title"),
+		@Index(name = "idx_task_due_Date", columnList = "dueDate"),
+		@Index(name = "idx_task_status", columnList = "status")
+})
 @Entity
 @Getter
 @Setter
@@ -20,6 +24,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class Task {
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-	Optional<Task> findByTitleIgnoreCase(String title);
+	List<Task> findByUserId(Long userId);
 
 	List<Task> findByStatus(Status status);
 
@@ -24,6 +24,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
 	List<Task> findByDueDateBetween(LocalDate start, LocalDate end);
 
-	@Query("SELECT t FROM Task t WHERE LOWER(t.title) LIKE %:keyword% OR LOWER(t.description) LIKE %:keyword%")
+	@Query(value = "SELECT t FROM Task t WHERE LOWER(t.title) LIKE %:keyword% OR LOWER(t.description) LIKE %:keyword%")
 	List<Task> searchByKeyword(@Param("keyword") String keyword);
 }

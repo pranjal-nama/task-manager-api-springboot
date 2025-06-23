@@ -23,19 +23,14 @@ public class TaskController {
 		return taskService.createTask(requestDTO);
 	}
 
+	@GetMapping("/user/{userId}")
+	public List<TaskResponseDTO> getTasksByUserId(@PathVariable Long userId){
+		return taskService.getTasksByUserId(userId);
+	}
+
 	@GetMapping("/{id}")
 	public TaskResponseDTO getTaskById(@PathVariable Long id) {
 		return taskService.getTaskById(id);
-	}
-
-	@GetMapping("/title/{title}")
-	public TaskResponseDTO getTaskByTitle(@PathVariable String title) {
-		return taskService.getTaskByTitle(title);
-	}
-
-	@GetMapping
-	public List<TaskResponseDTO> getAllTasks() {
-		return taskService.getAllTasks();
 	}
 
 	// Filter by Status
@@ -79,10 +74,5 @@ public class TaskController {
 	@DeleteMapping("/{id}")
 	public void deleteTask(@PathVariable Long id) {
 		taskService.deleteTask(id);
-	}
-
-	@DeleteMapping("/title/{title}")
-	public void deleteTaskByTitle(@PathVariable String title) {
-		taskService.deleteTaskByTitle(title);
 	}
 }

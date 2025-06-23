@@ -11,12 +11,10 @@ import java.util.List;
 public interface TaskService {
 
 	TaskResponseDTO createTask(TaskRequestDTO requestDTO);
+	List<TaskResponseDTO> getTasksByUserId(Long userId);
 	TaskResponseDTO getTaskById(Long taskId);
-	TaskResponseDTO getTaskByTitle(String title);
-	List<TaskResponseDTO> getAllTasks();
 	TaskResponseDTO updateTask(Long taskId, TaskRequestDTO updatedDTO);
 	void deleteTask(Long taskId);
-	void deleteTaskByTitle(String title);
 
 	List<TaskResponseDTO> getTasksByStatus(String status);
 	List<TaskResponseDTO> getTasksByPriority(String priority);

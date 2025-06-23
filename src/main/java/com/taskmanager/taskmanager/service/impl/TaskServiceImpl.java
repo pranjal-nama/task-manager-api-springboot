@@ -3,8 +3,6 @@ package com.taskmanager.taskmanager.service.impl;
 import com.taskmanager.taskmanager.dto.TaskRequestDTO;
 import com.taskmanager.taskmanager.dto.TaskResponseDTO;
 import com.taskmanager.taskmanager.entity.Task;
-import com.taskmanager.taskmanager.enums.Priority;
-import com.taskmanager.taskmanager.enums.Status;
 import com.taskmanager.taskmanager.exception.ResourceNotFoundException;
 import com.taskmanager.taskmanager.mapper.TaskMapper;
 import com.taskmanager.taskmanager.repository.TaskRepository;
@@ -36,24 +34,18 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public List<TaskResponseDTO> getTasksByUserId(Long userId) {
+		return taskRepository.findByUserId(userId)
+				.stream()
+				.map(taskMapper::toDTO)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public TaskResponseDTO getTaskById(Long taskId) {
 		return taskMapper.toDTO(taskRepository.findById(taskId)
 				.orElseThrow(() -> new ResourceNotFoundException("Task", "id", taskId)));
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public TaskResponseDTO getTaskByTitle(String title) {
-		return taskMapper.toDTO(taskRepository.findByTitleIgnoreCase(title)
-				.orElseThrow(() -> new ResourceNotFoundException("Task", "title", title)));
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<TaskResponseDTO> getAllTasks() {
-		return taskRepository.findAll().stream()
-				.map(taskMapper::toDTO)
-				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -113,13 +105,6 @@ public class TaskServiceImpl implements TaskService {
 	public void deleteTask(Long taskId) {
 		Task task = taskRepository.findById(taskId)
 				.orElseThrow(() -> new ResourceNotFoundException("Task", "id", taskId));
-		taskRepository.delete(task);
-	}
-
-	@Override
-	public void deleteTaskByTitle(String title) {
-		Task task = taskRepository.findByTitleIgnoreCase(title)
-				.orElseThrow(() -> new ResourceNotFoundException("Task", "title", title));
 		taskRepository.delete(task);
 	}
 }
