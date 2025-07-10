@@ -25,6 +25,18 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 
+	// Handle 409 - Resource Already Exists
+	@ExceptionHandler(ResourceAlreadyExistsException.class)
+	public ResponseEntity<Map<String, Object>> handleResourceAlreadyExists(ResourceAlreadyExistsException ex) {
+		Map<String, Object> error = new HashMap<>();
+		error.put("timestamp", LocalDateTime.now());
+		error.put("status", HttpStatus.CONFLICT.value());
+		error.put("error", "Conflict");
+		error.put("message", ex.getMessage());
+
+		return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+	}
+
 	// Handle 400 - Validation Errors
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
