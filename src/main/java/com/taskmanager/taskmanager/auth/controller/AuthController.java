@@ -1,6 +1,7 @@
 package com.taskmanager.taskmanager.auth.controller;
 
 import com.taskmanager.taskmanager.auth.dto.AuthResponse;
+import com.taskmanager.taskmanager.auth.dto.LoginRequest;
 import com.taskmanager.taskmanager.auth.dto.RegisterRequest;
 import com.taskmanager.taskmanager.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
-public class Controller {
+public class AuthController {
 
 	@Autowired
 	private AuthService authService;
@@ -22,5 +23,11 @@ public class Controller {
 	public ResponseEntity<AuthResponse> registerUser(@RequestBody RegisterRequest request){
 		AuthResponse response = authService.register(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+		AuthResponse response = authService.login(request);
+		return ResponseEntity.ok(response);
 	}
 }
