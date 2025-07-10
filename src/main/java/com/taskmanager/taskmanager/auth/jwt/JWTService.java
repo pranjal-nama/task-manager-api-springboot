@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.security.Key;
@@ -32,8 +33,14 @@ public class JWTService {
 
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
-		String role = userDetails.getAuthorities().iterator().next().getAuthority();
+
+		String role = userDetails.getAuthorities().stream()
+				.findFirst()
+				.map(GrantedAuthority::getAuthority)
+				.orElse("ROLE_USER");
+
 		claims.put("role", role);
+
 		return buildToken(claims, userDetails.getUsername());
 	}
 

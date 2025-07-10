@@ -3,6 +3,7 @@ package com.taskmanager.taskmanager.auth;
 import com.taskmanager.taskmanager.entity.User;
 import com.taskmanager.taskmanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		return org.springframework.security.core.userdetails.User.builder()
 				.username(user.getEmail())
 				.password(user.getPassword())
-				.roles(user.getRole().name())
+				.authorities(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
 				.build();
 	}
 }

@@ -33,7 +33,7 @@ public class Task {
 	private Long taskId;
 
 	@NotBlank(message = "Title can not be empty")
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	@Size(min = 2, message = "Title must be at least 2 characters")
 	private String title;
 
