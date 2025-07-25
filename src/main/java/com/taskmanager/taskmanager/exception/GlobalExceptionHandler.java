@@ -9,13 +9,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 	// Handle 404 - Resource Not Found
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<Map<String, Object>> handleResourceNotFound(ResourceNotFoundException ex) {
+		logger.warn("Resource not found: {}", ex.getMessage());
 		Map<String, Object> error = new HashMap<>();
 		error.put("timestamp", LocalDateTime.now());
 		error.put("status", HttpStatus.NOT_FOUND.value());
@@ -28,6 +33,7 @@ public class GlobalExceptionHandler {
 	// Handle 409 - Resource Already Exists
 	@ExceptionHandler(ResourceAlreadyExistsException.class)
 	public ResponseEntity<Map<String, Object>> handleResourceAlreadyExists(ResourceAlreadyExistsException ex) {
+		logger.warn("Conflict: {}", ex.getMessage());
 		Map<String, Object> error = new HashMap<>();
 		error.put("timestamp", LocalDateTime.now());
 		error.put("status", HttpStatus.CONFLICT.value());
@@ -47,6 +53,8 @@ public class GlobalExceptionHandler {
 				fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage())
 		);
 
+		logger.info("Validation error: {}", fieldErrors);
+
 		errorResponse.put("timestamp", LocalDateTime.now());
 		errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
 		errorResponse.put("error", "Validation Error");
@@ -58,6 +66,7 @@ public class GlobalExceptionHandler {
 	// Handle 500 - Generic Exception
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
+		logger.error("Unhandled exception occurred", ex);
 		Map<String, Object> error = new HashMap<>();
 		error.put("timestamp", LocalDateTime.now());
 		error.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
